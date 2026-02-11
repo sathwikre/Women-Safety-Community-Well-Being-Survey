@@ -2,162 +2,335 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Women Safety – Location Survey</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Women Safety – Community Well-Being Survey</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+    }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --primary-light: #e0e7ff;
+      --secondary: #ec4899;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --radius-sm: 0.375rem;
+      --radius: 0.5rem;
+      --radius-md: 0.75rem;
+      --radius-lg: 1rem;
+      --radius-xl: 1.5rem;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     body {
-      background: #f4f5fb;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
+      padding: 24px 16px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Header Card */
+    .header-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-xl);
+      text-align: center;
+      animation: fadeInDown 0.6s ease-out;
+    }
+
+    .header-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      border-radius: var(--radius-lg);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .header-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-subtitle {
+      font-size: 16px;
+      color: var(--gray-500);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Progress Steps */
+    .progress-container {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 24px 32px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-lg);
+      animation: fadeInUp 0.6s ease-out 0.1s both;
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .progress-steps::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 50px;
+      right: 50px;
+      height: 4px;
+      background: var(--gray-200);
+      border-radius: 2px;
+      z-index: 0;
+    }
+
+    .progress-line {
+      position: absolute;
+      top: 20px;
+      left: 50px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      border-radius: 2px;
+      z-index: 1;
+      transition: width 0.5s ease;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      flex: 1;
+    }
+
+    .step-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--gray-300);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
-    }
-
-    .card {
-      background: #ffffff;
-      width: 100%;
-      max-width: 520px;
-      padding: 24px 24px 20px;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
-    }
-
-    .card-header {
-      margin-bottom: 18px;
-    }
-
-    .card-title {
-      font-size: 20px;
       font-weight: 600;
-      color: #111827;
-      margin-bottom: 4px;
+      font-size: 16px;
+      color: var(--gray-400);
+      transition: var(--transition-slow);
+      margin-bottom: 8px;
     }
 
-    .card-subtitle {
+    .step.active .step-circle {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      box-shadow: 0 0 0 4px var(--primary-light);
+      transform: scale(1.1);
+    }
+
+    .step.completed .step-circle {
+      border-color: var(--success);
+      background: var(--success);
+      color: white;
+    }
+
+    .step-label {
       font-size: 13px;
-      color: #6b7280;
+      font-weight: 600;
+      color: var(--gray-400);
+      transition: var(--transition);
     }
 
+    .step.active .step-label {
+      color: var(--primary);
+    }
+
+    .step.completed .step-label {
+      color: var(--success);
+    }
+
+    /* Form Card */
+    .form-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      box-shadow: var(--shadow-xl);
+      animation: fadeInUp 0.6s ease-out 0.2s both;
+    }
+
+    /* Section Cards */
+    .section-card {
+      background: var(--gray-50);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid var(--gray-200);
+      transition: var(--transition);
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .section-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--gray-300);
+    }
+
+    .section-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+
+    .section-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .section-icon.location {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    }
+
+    .section-icon.personal {
+      background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+    }
+
+    .section-icon.social {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+
+    .section-icon.safety {
+      background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-top: 2px;
+    }
+
+    /* Form Groups */
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom: 20px;
     }
 
-    .text-input {
-      width: 100%;
-      padding: 8px 10px;
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .field-label {
+      display: block;
       font-size: 14px;
-      border-radius: 6px;
-      border: 1px solid #d1d5db;
-      background-color: #ffffff;
-      color: #111827;
-      outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .text-input:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
-    }
-
-    textarea.text-input {
-      min-height: 80px;
-      resize: vertical;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 8px;
     }
 
     .field-label-row {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      margin-bottom: 8px;
     }
 
     .field-hint {
-      font-size: 11px;
-      color: #9ca3af;
-    }
-
-    .step-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 16px 0 8px;
-    }
-
-    .step-tag {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: #2563eb;
-      background: #eff6ff;
-      border-radius: 999px;
-      padding: 2px 8px;
-    }
-
-    .step-text {
-      font-size: 13px;
-      font-weight: 600;
-      color: #111827;
-    }
-
-    .section-heading {
-      margin: 18px 0 6px;
-      font-size: 15px;
-      font-weight: 600;
-      color: #111827;
-    }
-
-    .section-subtitle {
-      margin-bottom: 8px;
       font-size: 12px;
-      color: #6b7280;
-    }
-
-    label {
-      display: block;
-      font-size: 13px;
+      color: var(--gray-400);
       font-weight: 500;
-      color: #374151;
-      margin-bottom: 6px;
     }
 
-    /* Native select (used for Area) */
-    select {
+    /* Text Inputs */
+    .text-input-wrapper {
+      position: relative;
+    }
+
+    .text-input {
       width: 100%;
-      padding: 8px 10px;
-      font-size: 14px;
-      border-radius: 6px;
-      border: 1px solid #d1d5db;
-      background-color: #ffffff;
-      color: #111827;
+      padding: 14px 16px;
+      font-size: 15px;
+      border-radius: var(--radius);
+      border: 2px solid var(--gray-200);
+      background: white;
+      color: var(--gray-800);
       outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
-      max-height: 220px;
+      transition: var(--transition);
     }
 
-    select:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+    .text-input:hover {
+      border-color: var(--gray-300);
     }
 
-    select:disabled {
-      background-color: #f3f4f6;
-      color: #9ca3af;
-      cursor: not-allowed;
+    .text-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-light);
     }
 
-    /* Custom searchable dropdown for Police Station */
+    textarea.text-input {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* Custom Select Dropdown */
     .custom-select {
       position: relative;
-      margin-top: 4px;
     }
 
     .select-display {
@@ -165,680 +338,1017 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 10px;
-      border-radius: 6px;
-      border: 1px solid #d1d5db;
-      background-color: #ffffff;
-      font-size: 14px;
-      color: #111827;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      border: 2px solid var(--gray-200);
+      background: white;
+      font-size: 15px;
+      color: var(--gray-800);
       cursor: pointer;
       outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease,
-        background-color 0.15s ease;
+      transition: var(--transition);
     }
 
     .select-display:hover {
-      border-color: #9ca3af;
+      border-color: var(--gray-300);
     }
 
-    .select-display:focus-visible {
-      outline: 2px solid #2563eb;
-      outline-offset: 2px;
+    .select-display:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-light);
+    }
+
+    .select-display.active {
+      border-color: var(--primary);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
     }
 
     .select-placeholder {
-      color: #9ca3af;
-      flex: 1;
+      color: var(--gray-400);
     }
 
     .select-value {
-      flex: 1;
-      margin-right: 8px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      color: var(--gray-800);
+      font-weight: 500;
     }
 
     .select-arrow {
-      margin-left: 8px;
-      font-size: 11px;
-      color: #6b7280;
+      font-size: 12px;
+      color: var(--gray-400);
+      transition: transform 0.3s ease;
+    }
+
+    .select-display.active .select-arrow {
+      transform: rotate(180deg);
     }
 
     .select-panel {
       position: absolute;
       left: 0;
       right: 0;
-      margin-top: 4px;
-      background-color: #ffffff;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 14px 45px rgba(15, 23, 42, 0.18);
-      padding: 8px;
-      z-index: 20;
-      display: none;
+      top: 100%;
+      background: white;
+      border-radius: 0 0 var(--radius) var(--radius);
+      border: 2px solid var(--primary);
+      border-top: none;
+      box-shadow: var(--shadow-lg);
+      padding: 12px;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
     }
 
     .select-panel.open {
-      display: block;
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
     }
 
     .search-input {
       width: 100%;
-      padding: 6px 9px;
-      font-size: 12px;
-      border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      background-color: #f9fafb;
-      color: #111827;
+      padding: 10px 14px;
+      font-size: 14px;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--gray-200);
+      background: var(--gray-50);
+      color: var(--gray-800);
       outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease,
-        background-color 0.15s ease;
-    }
-
-    .search-input::placeholder {
-      color: #9ca3af;
+      transition: var(--transition);
+      margin-bottom: 8px;
     }
 
     .search-input:focus {
-      border-color: #2563eb;
-      background-color: #ffffff;
-      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.12);
+      border-color: var(--primary);
+      background: white;
     }
 
     .select-options {
       list-style: none;
-      margin: 6px 0 0;
-      padding: 0;
-      max-height: 220px;
+      max-height: 240px;
       overflow-y: auto;
+      padding: 4px;
+    }
+
+    .select-options::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .select-options::-webkit-scrollbar-track {
+      background: var(--gray-100);
+      border-radius: 3px;
+    }
+
+    .select-options::-webkit-scrollbar-thumb {
+      background: var(--gray-300);
+      border-radius: 3px;
     }
 
     .select-option {
-      padding: 6px 8px;
-      border-radius: 4px;
-      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
       cursor: pointer;
+      transition: var(--transition);
+      color: var(--gray-700);
     }
 
     .select-option:hover {
-      background-color: #eff6ff;
-      color: #1d4ed8;
+      background: var(--primary-light);
+      color: var(--primary-dark);
     }
 
     .no-results {
-      font-size: 12px;
-      color: #6b7280;
-      padding: 4px 2px;
+      font-size: 13px;
+      color: var(--gray-500);
+      padding: 16px;
+      text-align: center;
     }
 
-    .radio-group,
-    .checkbox-group {
+    /* Radio & Checkbox Cards */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .options-grid.two-col {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .options-grid.three-col {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 640px) {
+      .options-grid.two-col,
+      .options-grid.three-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .option-card {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .option-card input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .option-label {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px 16px;
-      margin-top: 4px;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: white;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-600);
+      transition: var(--transition);
+      cursor: pointer;
     }
 
-    .radio-option,
-    .checkbox-option {
+    .option-card:hover .option-label {
+      border-color: var(--gray-300);
+      background: var(--gray-50);
+    }
+
+    .option-card input:checked + .option-label {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .option-icon {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--gray-300);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .option-card input[type="checkbox"] + .option-label .option-icon {
+      border-radius: var(--radius-sm);
+    }
+
+    .option-card input:checked + .option-label .option-icon {
+      border-color: var(--primary);
+      background: var(--primary);
+    }
+
+    .option-icon::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0;
+      transform: scale(0);
+      transition: var(--transition);
+    }
+
+    .option-card input[type="checkbox"] + .option-label .option-icon::after {
+      width: 10px;
+      height: 6px;
+      border-radius: 0;
+      background: transparent;
+      border-left: 2px solid white;
+      border-bottom: 2px solid white;
+      transform: rotate(-45deg) scale(0);
+    }
+
+    .option-card input:checked + .option-label .option-icon::after {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .option-card input[type="checkbox"]:checked + .option-label .option-icon::after {
+      transform: rotate(-45deg) scale(1);
+    }
+
+    /* Submit Button */
+    .submit-container {
+      margin-top: 32px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 18px 32px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: var(--radius);
+      border: none;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px 0 rgba(99, 102, 241, 0.5);
+    }
+
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Error Messages */
+    .error-message {
+      display: none;
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--danger);
+      font-weight: 500;
+      padding-left: 4px;
+    }
+
+    .error-message.show {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 13px;
-      color: #111827;
     }
 
-    .radio-option input,
-    .checkbox-option input {
-      width: 14px;
-      height: 14px;
+    .error-message::before {
+      content: '⚠';
     }
 
-    .error-message {
-      display: none;
-      margin-top: 4px;
-      font-size: 12px;
-      color: #b91c1c;
-    }
-
-    .btn-row {
-      margin-top: 6px;
-    }
-
-    button[type="submit"] {
-      width: 100%;
-      padding: 9px 12px;
-      font-size: 14px;
-      font-weight: 500;
-      border-radius: 6px;
-      border: none;
-      background-color: #2563eb;
-      color: #ffffff;
-      cursor: pointer;
-      transition: background-color 0.15s ease, transform 0.05s ease;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #1d4ed8;
-    }
-
-    button[type="submit"]:active {
-      transform: translateY(1px);
-    }
-
+    /* Success Message */
     .success-message {
       display: none;
-      margin-top: 12px;
-      font-size: 13px;
-      color: #166534;
-      background: #ecfdf3;
-      border-radius: 6px;
-      padding: 8px 10px;
+      margin-top: 24px;
+      padding: 20px;
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border: 2px solid var(--success);
+      border-radius: var(--radius);
+      color: #065f46;
+      font-weight: 500;
+      text-align: center;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    /* Hidden sections */
+    .hidden-section {
+      display: none;
+    }
+
+    .hidden-section.show {
+      display: block;
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 16px 12px;
+      }
+
+      .header-card,
+      .form-card {
+        padding: 24px 20px;
+      }
+
+      .header-title {
+        font-size: 24px;
+      }
+
+      .progress-container {
+        padding: 20px 16px;
+      }
+
+      .step-label {
+        font-size: 11px;
+      }
+
+      .step-circle {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+      }
+
+      .progress-steps::before {
+        top: 16px;
+        left: 40px;
+        right: 40px;
+      }
+
+      .progress-line {
+        top: 16px;
+        left: 40px;
+      }
+
+      .section-card {
+        padding: 20px 16px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title">Location Details</div>
-      <div class="card-subtitle">
-        Select your Police Station and Area for the survey.
+  <div class="container">
+    <!-- Header -->
+    <div class="header-card">
+      <div class="header-icon">🛡️</div>
+      <h1 class="header-title">Women Safety Survey</h1>
+      <p class="header-subtitle">Help us understand and improve community well-being by sharing your experiences</p>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="progress-container">
+      <div class="progress-steps">
+        <div class="progress-line" id="progressLine" style="width: 33%"></div>
+        <div class="step active" id="step1Indicator">
+          <div class="step-circle">1</div>
+          <span class="step-label">Location</span>
+        </div>
+        <div class="step" id="step2Indicator">
+          <div class="step-circle">2</div>
+          <span class="step-label">Personal Details</span>
+        </div>
+        <div class="step" id="step3Indicator">
+          <div class="step-circle">3</div>
+          <span class="step-label">Safety Survey</span>
+        </div>
       </div>
     </div>
 
-    <form id="surveyForm" novalidate>
-      <!-- STEP 1: Police Station -->
-      <div class="step-header">
-        <span class="step-tag">Step 1</span>
-        <span class="step-text">Select Police Station</span>
-      </div>
-      <!-- Custom searchable Police Station dropdown -->
-      <div class="form-group">
-        <div class="field-label-row">
-          <label for="policeStationDisplay">Police Station</label>
-          <span class="field-hint">Click to search & select</span>
-        </div>
-
-        <div class="custom-select" id="policeStationDropdown">
-          <button
-            type="button"
-            id="policeStationDisplay"
-            class="select-display"
-          >
-            <span id="policeStationPlaceholder" class="select-placeholder">
-              Select Police Station
-            </span>
-            <span
-              id="policeStationValue"
-              class="select-value"
-              style="display: none"
-            ></span>
-            <span class="select-arrow">▾</span>
-          </button>
-
-          <div class="select-panel" id="policeStationPanel">
-            <input
-              type="text"
-              id="policeStationSearch"
-              class="search-input select-search"
-              placeholder="Search police station..."
-              autocomplete="off"
-            />
-            <ul id="policeStationOptions" class="select-options">
-              <!-- Stations will be rendered here -->
-            </ul>
-            <div
-              id="policeStationNoResults"
-              class="no-results"
-              style="display: none"
-            >
-              No stations found.
+    <!-- Form -->
+    <div class="form-card">
+      <form id="surveyForm" novalidate>
+        
+        <!-- Location Section -->
+        <div class="section-card" id="locationSection">
+          <div class="section-header">
+            <div class="section-icon location">📍</div>
+            <div>
+              <h2 class="section-title">Location Details</h2>
+              <p class="section-subtitle">Select your Police Station and Area</p>
             </div>
           </div>
+
+          <!-- Police Station -->
+          <div class="form-group">
+            <div class="field-label-row">
+              <label class="field-label" for="policeStationDisplay">Police Station</label>
+              <span class="field-hint">Search and select</span>
+            </div>
+            <div class="custom-select" id="policeStationDropdown">
+              <button type="button" id="policeStationDisplay" class="select-display">
+                <span id="policeStationPlaceholder" class="select-placeholder">Select Police Station</span>
+                <span id="policeStationValue" class="select-value" style="display: none"></span>
+                <span class="select-arrow">▼</span>
+              </button>
+              <div class="select-panel" id="policeStationPanel">
+                <input type="text" id="policeStationSearch" class="search-input select-search" placeholder="Search police station..." autocomplete="off" />
+                <ul id="policeStationOptions" class="select-options"></ul>
+                <div id="policeStationNoResults" class="no-results" style="display: none">No stations found.</div>
+              </div>
+            </div>
+            <input type="hidden" id="policeStation" name="policeStation" />
+            <div id="policeStationError" class="error-message">Please select a Police Station.</div>
+          </div>
+
+          <!-- Area -->
+          <div class="form-group">
+            <div class="field-label-row">
+              <label class="field-label" for="areaDisplay">Area / Village</label>
+              <span class="field-hint">Search and select</span>
+            </div>
+            <div class="custom-select" id="areaDropdown">
+              <button type="button" id="areaDisplay" class="select-display">
+                <span id="areaPlaceholder" class="select-placeholder">Select Area / Village</span>
+                <span id="areaValue" class="select-value" style="display: none"></span>
+                <span class="select-arrow">▼</span>
+              </button>
+              <div class="select-panel" id="areaPanel">
+                <input type="text" id="areaSearch" class="search-input select-search" placeholder="Search area..." autocomplete="off" />
+                <ul id="areaOptions" class="select-options"></ul>
+                <div id="areaNoResults" class="no-results" style="display: none">No areas found.</div>
+              </div>
+            </div>
+            <input type="hidden" id="area" name="area" />
+            <div id="areaError" class="error-message">Please select an Area.</div>
+          </div>
         </div>
 
-        <!-- Hidden field that actually stores the value for the form -->
-        <input type="hidden" id="policeStation" name="policeStation" />
+        <!-- Survey Sections (Hidden until Area is selected) -->
+        <div id="surveySections" class="hidden-section">
+          
+          <!-- Personal Details Section -->
+          <div class="section-card">
+            <div class="section-header">
+              <div class="section-icon personal">👤</div>
+              <div>
+                <h2 class="section-title">Personal Details</h2>
+                <p class="section-subtitle">Tell us a bit about yourself</p>
+              </div>
+            </div>
 
-        <div id="policeStationError" class="error-message">
-          Please select a Police Station.
-        </div>
-      </div>
+            <!-- Name -->
+            <div class="form-group">
+              <label class="field-label" for="respondentName">Respondent Name</label>
+              <div class="text-input-wrapper">
+                <input type="text" id="respondentName" name="respondentName" class="text-input" placeholder="Enter your full name" />
+              </div>
+              <div id="respondentNameError" class="error-message"></div>
+            </div>
 
-      <!-- STEP 2: Area / Village -->
-      <div class="step-header">
-        <span class="step-tag">Step 2</span>
-        <span class="step-text">Select Area / Village</span>
-      </div>
-      <div class="form-group">
-        <div class="field-label-row">
-          <label for="area">Area / Village</label>
-          <span class="field-hint">Click to search & select</span>
-        </div>
+            <!-- Age Group -->
+            <div class="form-group">
+              <label class="field-label">Age Group</label>
+              <div class="options-grid three-col">
+                <label class="option-card">
+                  <input type="radio" name="ageGroup" value="Below 25" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Below 25</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="ageGroup" value="25–45" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>25–45</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="ageGroup" value="Above 45" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Above 45</span>
+                  </div>
+                </label>
+              </div>
+              <div id="ageGroupError" class="error-message"></div>
+            </div>
 
-        <div class="custom-select" id="areaDropdown">
-          <button
-            type="button"
-            id="areaDisplay"
-            class="select-display"
-          >
-            <span id="areaPlaceholder" class="select-placeholder">
-              Select Area / Village
-            </span>
-            <span
-              id="areaValue"
-              class="select-value"
-              style="display: none"
-            ></span>
-            <span class="select-arrow">▾</span>
-          </button>
+            <!-- Mobile Number -->
+            <div class="form-group">
+              <label class="field-label" for="mobileNumber">Mobile Number</label>
+              <div class="text-input-wrapper">
+                <input type="tel" id="mobileNumber" name="mobileNumber" class="text-input" inputmode="numeric" maxlength="10" placeholder="Enter 10 digit mobile number" />
+              </div>
+              <div id="mobileNumberError" class="error-message"></div>
+            </div>
 
-          <div class="select-panel" id="areaPanel">
-            <input
-              type="text"
-              id="areaSearch"
-              class="search-input select-search"
-              placeholder="Search area..."
-              autocomplete="off"
-            />
-            <ul id="areaOptions" class="select-options">
-              <!-- Areas will be rendered here -->
-            </ul>
-            <div
-              id="areaNoResults"
-              class="no-results"
-              style="display: none"
-            >
-              No areas found.
+            <!-- Occupation -->
+            <div class="form-group">
+              <label class="field-label">Occupation</label>
+              <div class="options-grid two-col">
+                <label class="option-card">
+                  <input type="radio" name="occupation" value="Student" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Student</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="occupation" value="Homemaker" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Homemaker</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="occupation" value="Employed (Govt / Private / Self)" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Employed</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="occupation" value="Unemployed" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Unemployed</span>
+                  </div>
+                </label>
+              </div>
+              <div id="occupationError" class="error-message"></div>
             </div>
           </div>
-        </div>
 
-        <!-- Hidden field that actually stores the Area value for the form -->
-        <input type="hidden" id="area" name="area" />
+          <!-- Social Environment Section -->
+          <div class="section-card">
+            <div class="section-header">
+              <div class="section-icon social">🏘️</div>
+              <div>
+                <h2 class="section-title">Social Environment</h2>
+                <p class="section-subtitle">About your family and neighborhood</p>
+              </div>
+            </div>
 
-        <div id="areaError" class="error-message">
-          Please select an Area.
-        </div>
-      </div>
+            <!-- Family Behavior -->
+            <div class="form-group">
+              <label class="field-label">Family behavior towards you/your children</label>
+              <div class="options-grid three-col">
+                <label class="option-card">
+                  <input type="radio" name="familyBehavior" value="Good" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Good</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="familyBehavior" value="Average" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Average</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="familyBehavior" value="Poor" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Poor</span>
+                  </div>
+                </label>
+              </div>
+              <div id="familyBehaviorError" class="error-message"></div>
+            </div>
 
-      <!-- STEP 3: Full survey, shown only after Area is selected -->
-      <div id="step3Container" style="display: none">
-        <div class="step-header">
-          <span class="step-tag">Step 3</span>
-          <span class="step-text">Answer the survey questions</span>
-        </div>
+            <!-- Addiction -->
+            <div class="form-group">
+              <label class="field-label">Any addiction in family members?</label>
+              <div class="options-grid two-col">
+                <label class="option-card">
+                  <input type="checkbox" name="addiction" value="Alcohol" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Alcohol</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="checkbox" name="addiction" value="Drugs" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Drugs</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="checkbox" name="addiction" value="Tobacco" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Tobacco</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="checkbox" name="addiction" value="No" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>No</span>
+                  </div>
+                </label>
+              </div>
+              <div id="addictionError" class="error-message"></div>
+            </div>
 
-        <!-- Personal Details -->
-        <h3 class="section-heading">Personal Details</h3>
-        <p class="section-subtitle">
-          Tell us a bit about yourself. All questions in this section are required.
-        </p>
-
-        <!-- 1. Respondent Name -->
-        <div class="form-group">
-          <label for="respondentName">1. Respondent Name</label>
-          <input
-            type="text"
-            id="respondentName"
-            name="respondentName"
-            class="text-input"
-          />
-          <div id="respondentNameError" class="error-message"></div>
-        </div>
-
-        <!-- 2. Age Group -->
-        <div class="form-group">
-          <label>2. Age Group</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="ageGroup" value="Below 25" />
-              <span>Below 25</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="ageGroup" value="25–45" />
-              <span>25–45</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="ageGroup" value="Above 45" />
-              <span>Above 45</span>
-            </label>
+            <!-- Neighbourhood -->
+            <div class="form-group">
+              <label class="field-label">Neighbourhood behaviour towards you</label>
+              <div class="options-grid three-col">
+                <label class="option-card">
+                  <input type="radio" name="neighbourhood" value="Good" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Good</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="neighbourhood" value="Average" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Average</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="neighbourhood" value="Poor" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Poor</span>
+                  </div>
+                </label>
+              </div>
+              <div id="neighbourhoodError" class="error-message"></div>
+            </div>
           </div>
-          <div id="ageGroupError" class="error-message"></div>
-        </div>
 
-        <!-- 3. Mobile Number -->
-        <div class="form-group">
-          <label for="mobileNumber">3. Mobile Number</label>
-          <input
-            type="tel"
-            id="mobileNumber"
-            name="mobileNumber"
-            class="text-input"
-            inputmode="numeric"
-            maxlength="10"
-            placeholder="10 digit mobile number"
-          />
-          <div id="mobileNumberError" class="error-message"></div>
-        </div>
+          <!-- Safety & Public Experience Section -->
+          <div class="section-card">
+            <div class="section-header">
+              <div class="section-icon safety">🛡️</div>
+              <div>
+                <h2 class="section-title">Safety & Public Experience</h2>
+                <p class="section-subtitle">Share your safety experiences</p>
+              </div>
+            </div>
 
-        <!-- 4. Occupation -->
-        <div class="form-group">
-          <label>4. Occupation</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="occupation" value="Student" />
-              <span>Student</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="occupation" value="Homemaker" />
-              <span>Homemaker</span>
-            </label>
-            <label class="radio-option">
-              <input
-                type="radio"
-                name="occupation"
-                value="Employed (Govt / Private / Self)"
-              />
-              <span>Employed (Govt / Private / Self)</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="occupation" value="Unemployed" />
-              <span>Unemployed</span>
-            </label>
+            <!-- Street Safety -->
+            <div class="form-group">
+              <label class="field-label">Safety of your street/locality</label>
+              <div class="options-grid three-col">
+                <label class="option-card">
+                  <input type="radio" name="streetSafety" value="Safe" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Safe</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="streetSafety" value="Neutral" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Neutral</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="streetSafety" value="Unsafe" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Unsafe</span>
+                  </div>
+                </label>
+              </div>
+              <div id="streetSafetyError" class="error-message"></div>
+            </div>
+
+            <!-- Public Transport -->
+            <div class="form-group">
+              <label class="field-label">Problems faced during public transportation</label>
+              <div class="options-grid three-col">
+                <label class="option-card">
+                  <input type="radio" name="publicTransport" value="Yes" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Yes</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="publicTransport" value="Sometimes" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Sometimes</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="publicTransport" value="No" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>No</span>
+                  </div>
+                </label>
+              </div>
+              <div id="publicTransportError" class="error-message"></div>
+            </div>
+
+            <!-- School Safety -->
+            <div class="form-group">
+              <label class="field-label">If student: Safety of school/college surroundings</label>
+              <div class="options-grid three-col">
+                <label class="option-card">
+                  <input type="radio" name="schoolSafety" value="Safe" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Safe</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="schoolSafety" value="Neutral" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Neutral</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="schoolSafety" value="Unsafe" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Unsafe</span>
+                  </div>
+                </label>
+              </div>
+              <div id="schoolSafetyError" class="error-message"></div>
+            </div>
+
+            <!-- Cyber Harassment -->
+            <div class="form-group">
+              <label class="field-label">Faced cyber harassment/blackmail</label>
+              <div class="options-grid three-col">
+                <label class="option-card">
+                  <input type="radio" name="cyberHarassment" value="Yes" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Yes</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="cyberHarassment" value="No" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>No</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="cyberHarassment" value="Not Sure" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Not Sure</span>
+                  </div>
+                </label>
+              </div>
+              <div id="cyberHarassmentError" class="error-message"></div>
+            </div>
+
+            <!-- Stalking -->
+            <div class="form-group">
+              <label class="field-label">Faced forced love proposals/stalking</label>
+              <div class="options-grid three-col">
+                <label class="option-card">
+                  <input type="radio" name="stalking" value="Yes" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Yes</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="stalking" value="No" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>No</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="stalking" value="Not Sure" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Not Sure</span>
+                  </div>
+                </label>
+              </div>
+              <div id="stalkingError" class="error-message"></div>
+            </div>
+
+            <!-- Emergency Numbers -->
+            <div class="form-group">
+              <label class="field-label">Emergency police numbers visible in public places</label>
+              <div class="options-grid three-col">
+                <label class="option-card">
+                  <input type="radio" name="emergencyNumbers" value="Yes" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Yes</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="emergencyNumbers" value="No" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>No</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="emergencyNumbers" value="Not Sure" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Not Sure</span>
+                  </div>
+                </label>
+              </div>
+              <div id="emergencyNumbersError" class="error-message"></div>
+            </div>
+
+            <!-- Night Safety -->
+            <div class="form-group">
+              <label class="field-label">Safety feeling during night time</label>
+              <div class="options-grid three-col">
+                <label class="option-card">
+                  <input type="radio" name="nightSafety" value="Safe" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Safe</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="nightSafety" value="Neutral" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Neutral</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="nightSafety" value="Unsafe" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Unsafe</span>
+                  </div>
+                </label>
+              </div>
+              <div id="nightSafetyError" class="error-message"></div>
+            </div>
+
+            <!-- Police Response -->
+            <div class="form-group">
+              <label class="field-label">Police responsiveness in your area</label>
+              <div class="options-grid three-col">
+                <label class="option-card">
+                  <input type="radio" name="policeResponse" value="Immediate" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Immediate</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="policeResponse" value="Average" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Average</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="policeResponse" value="No Response" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>No Response</span>
+                  </div>
+                </label>
+              </div>
+              <div id="policeResponseError" class="error-message"></div>
+            </div>
+
+            <!-- Women Police Comfort -->
+            <div class="form-group">
+              <label class="field-label">Comfort in approaching women police officers</label>
+              <div class="options-grid three-col">
+                <label class="option-card">
+                  <input type="radio" name="womenPoliceComfort" value="Yes" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Yes</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="womenPoliceComfort" value="No" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>No</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="womenPoliceComfort" value="Not Sure" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Not Sure</span>
+                  </div>
+                </label>
+              </div>
+              <div id="womenPoliceComfortError" class="error-message"></div>
+            </div>
+
+            <!-- Shakti App -->
+            <div class="form-group">
+              <label class="field-label">Did you register in Shakti App</label>
+              <div class="options-grid two-col">
+                <label class="option-card">
+                  <input type="radio" name="shaktiApp" value="Yes" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>Yes</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="shaktiApp" value="No" />
+                  <div class="option-label">
+                    <span class="option-icon"></span>
+                    <span>No</span>
+                  </div>
+                </label>
+              </div>
+              <div id="shaktiAppError" class="error-message"></div>
+            </div>
+
+            <!-- Remarks -->
+            <div class="form-group">
+              <label class="field-label" for="remarks">Remarks (Optional)</label>
+              <textarea id="remarks" name="remarks" class="text-input" placeholder="Share any additional feedback or suggestions..."></textarea>
+            </div>
           </div>
-          <div id="occupationError" class="error-message"></div>
-        </div>
 
-        <!-- Social Environment -->
-        <h3 class="section-heading">Social Environment</h3>
-
-        <!-- 5. Family behavior -->
-        <div class="form-group">
-          <label>5. Family behavior towards you/your children</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="familyBehavior" value="Good" />
-              <span>Good</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="familyBehavior" value="Average" />
-              <span>Average</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="familyBehavior" value="Poor" />
-              <span>Poor</span>
-            </label>
+          <!-- Submit Button -->
+          <div class="submit-container">
+            <button type="submit" class="submit-btn">Submit Survey</button>
           </div>
-          <div id="familyBehaviorError" class="error-message"></div>
+
+          <!-- Success Message -->
+          <div id="successMessage" class="success-message"></div>
         </div>
-
-        <!-- 6. Addiction in family -->
-        <div class="form-group">
-          <label>6. Any addiction in family members?</label>
-          <div class="checkbox-group">
-            <label class="checkbox-option">
-              <input type="checkbox" name="addiction" value="Alcohol" />
-              <span>Alcohol</span>
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" name="addiction" value="Drugs" />
-              <span>Drugs</span>
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" name="addiction" value="Tobacco" />
-              <span>Tobacco</span>
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" name="addiction" value="No" />
-              <span>No</span>
-            </label>
-          </div>
-          <div id="addictionError" class="error-message"></div>
-        </div>
-
-        <!-- 7. Neighbourhood behaviour -->
-        <div class="form-group">
-          <label>7. Neighbourhood behaviour towards you</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="neighbourhood" value="Good" />
-              <span>Good</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="neighbourhood" value="Average" />
-              <span>Average</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="neighbourhood" value="Poor" />
-              <span>Poor</span>
-            </label>
-          </div>
-          <div id="neighbourhoodError" class="error-message"></div>
-        </div>
-
-        <!-- Safety & Public Experience -->
-        <h3 class="section-heading">Safety & Public Experience</h3>
-
-        <!-- 8. Safety of street/locality -->
-        <div class="form-group">
-          <label>8. Safety of your street/locality</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="streetSafety" value="Safe" />
-              <span>Safe</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="streetSafety" value="Neutral" />
-              <span>Neutral</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="streetSafety" value="Unsafe" />
-              <span>Unsafe</span>
-            </label>
-          </div>
-          <div id="streetSafetyError" class="error-message"></div>
-        </div>
-
-        <!-- 9. Problems in public transportation -->
-        <div class="form-group">
-          <label>9. Problems faced during public transportation</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="publicTransport" value="Yes" />
-              <span>Yes</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="publicTransport" value="Sometimes" />
-              <span>Sometimes</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="publicTransport" value="No" />
-              <span>No</span>
-            </label>
-          </div>
-          <div id="publicTransportError" class="error-message"></div>
-        </div>
-
-        <!-- 10. Safety of school/college surroundings -->
-        <div class="form-group">
-          <label>10. If student: Safety of school/college surroundings</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="schoolSafety" value="Safe" />
-              <span>Safe</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="schoolSafety" value="Neutral" />
-              <span>Neutral</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="schoolSafety" value="Unsafe" />
-              <span>Unsafe</span>
-            </label>
-          </div>
-          <div id="schoolSafetyError" class="error-message"></div>
-        </div>
-
-        <!-- 11. Cyber harassment -->
-        <div class="form-group">
-          <label>11. Faced cyber harassment/blackmail</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="cyberHarassment" value="Yes" />
-              <span>Yes</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="cyberHarassment" value="No" />
-              <span>No</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="cyberHarassment" value="Not Sure" />
-              <span>Not Sure</span>
-            </label>
-          </div>
-          <div id="cyberHarassmentError" class="error-message"></div>
-        </div>
-
-        <!-- 12. Forced love proposals/stalking -->
-        <div class="form-group">
-          <label>12. Faced forced love proposals/stalking</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="stalking" value="Yes" />
-              <span>Yes</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="stalking" value="No" />
-              <span>No</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="stalking" value="Not Sure" />
-              <span>Not Sure</span>
-            </label>
-          </div>
-          <div id="stalkingError" class="error-message"></div>
-        </div>
-
-        <!-- 13. Emergency police numbers visibility -->
-        <div class="form-group">
-          <label>13. Emergency police numbers visible in public places</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="emergencyNumbers" value="Yes" />
-              <span>Yes</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="emergencyNumbers" value="No" />
-              <span>No</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="emergencyNumbers" value="Not Sure" />
-              <span>Not Sure</span>
-            </label>
-          </div>
-          <div id="emergencyNumbersError" class="error-message"></div>
-        </div>
-
-        <!-- 14. Safety feeling during night time -->
-        <div class="form-group">
-          <label>14. Safety feeling during night time</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="nightSafety" value="Safe" />
-              <span>Safe</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="nightSafety" value="Neutral" />
-              <span>Neutral</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="nightSafety" value="Unsafe" />
-              <span>Unsafe</span>
-            </label>
-          </div>
-          <div id="nightSafetyError" class="error-message"></div>
-        </div>
-
-        <!-- 15. Police responsiveness -->
-        <div class="form-group">
-          <label>15. Police responsiveness in your area</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="policeResponse" value="Immediate" />
-              <span>Immediate</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="policeResponse" value="Average" />
-              <span>Average</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="policeResponse" value="No Response" />
-              <span>No Response</span>
-            </label>
-          </div>
-          <div id="policeResponseError" class="error-message"></div>
-        </div>
-
-        <!-- 16. Comfort with women police officers -->
-        <div class="form-group">
-          <label>16. Comfort in approaching women police officers</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="womenPoliceComfort" value="Yes" />
-              <span>Yes</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="womenPoliceComfort" value="No" />
-              <span>No</span>
-            </label>
-            <label class="radio-option">
-              <input
-                type="radio"
-                name="womenPoliceComfort"
-                value="Not Sure"
-              />
-              <span>Not Sure</span>
-            </label>
-          </div>
-          <div id="womenPoliceComfortError" class="error-message"></div>
-        </div>
-
-        <!-- 17. Shakti App registration -->
-        <div class="form-group">
-          <label>17. Did you register in Shakti App</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="shaktiApp" value="Yes" />
-              <span>Yes</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="shaktiApp" value="No" />
-              <span>No</span>
-            </label>
-          </div>
-          <div id="shaktiAppError" class="error-message"></div>
-        </div>
-
-        <!-- 18. Remarks (optional) -->
-        <div class="form-group">
-          <label for="remarks">18. Remarks (Optional)</label>
-          <textarea
-            id="remarks"
-            name="remarks"
-            class="text-input"
-            placeholder="Share any additional feedback or suggestions..."
-          ></textarea>
-        </div>
-
-        <div class="btn-row">
-          <button type="submit">Submit Survey</button>
-        </div>
-
-        <div id="successMessage" class="success-message"></div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 
   <!-- Load the large Police Station -> Area mapping -->
@@ -878,7 +1388,13 @@
     const arSearchInput = document.getElementById("areaSearch");
     const arOptionsList = document.getElementById("areaOptions");
     const arNoResults = document.getElementById("areaNoResults");
-    const step3Container = document.getElementById("step3Container");
+    const surveySections = document.getElementById("surveySections");
+
+    // Progress indicators
+    const step1Indicator = document.getElementById("step1Indicator");
+    const step2Indicator = document.getElementById("step2Indicator");
+    const step3Indicator = document.getElementById("step3Indicator");
+    const progressLine = document.getElementById("progressLine");
 
     // Personal Details inputs
     const respondentNameInput = document.getElementById("respondentName");
@@ -904,13 +1420,41 @@
       return checked ? checked.value : "";
     }
 
-    // Show/hide step 3 based on Area selection
-    function showStep3() {
-      step3Container.style.display = "block";
+    // Update progress indicator
+    function updateProgress(step) {
+      // Reset all steps
+      step1Indicator.classList.remove("active", "completed");
+      step2Indicator.classList.remove("active", "completed");
+      step3Indicator.classList.remove("active", "completed");
+
+      if (step === 1) {
+        step1Indicator.classList.add("active");
+        progressLine.style.width = "33%";
+      } else if (step === 2) {
+        step1Indicator.classList.add("completed");
+        step2Indicator.classList.add("active");
+        progressLine.style.width = "66%";
+      } else if (step === 3) {
+        step1Indicator.classList.add("completed");
+        step2Indicator.classList.add("completed");
+        step3Indicator.classList.add("active");
+        progressLine.style.width = "100%";
+      }
     }
 
-    function hideStep3() {
-      step3Container.style.display = "none";
+    // Show/hide survey sections based on Area selection
+    function showSurvey() {
+      surveySections.classList.add("show");
+      updateProgress(2);
+      // Scroll to survey sections smoothly
+      setTimeout(() => {
+        surveySections.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+
+    function hideSurvey() {
+      surveySections.classList.remove("show");
+      updateProgress(1);
     }
 
     // Render Police Station options into the custom dropdown list
@@ -946,11 +1490,11 @@
           psPlaceholder.style.display = "none";
 
           // Clear any previous error message
-          policeStationError.style.display = "none";
+          policeStationError.classList.remove("show");
 
           // When station changes, refresh areas
           populateAreasForStation(stationName);
-          areaError.style.display = "none";
+          areaError.classList.remove("show");
 
           closePoliceStationPanel();
         });
@@ -961,6 +1505,7 @@
 
     function openPoliceStationPanel() {
       psPanel.classList.add("open");
+      psDisplayButton.classList.add("active");
       psSearchInput.value = "";
       renderPoliceStationOptions("");
       psSearchInput.focus();
@@ -968,6 +1513,7 @@
 
     function closePoliceStationPanel() {
       psPanel.classList.remove("open");
+      psDisplayButton.classList.remove("active");
     }
 
     // Populate Areas dropdown for a selected Police Station
@@ -981,7 +1527,7 @@
         : "Select Area (choose station first)";
 
       // Hide the full survey until a new Area is chosen
-      hideStep3();
+      hideSurvey();
 
       // Re-render list for the new station with no search filter
       renderAreaOptions(stationName, "");
@@ -1037,10 +1583,10 @@
           arValueSpan.style.display = "inline";
           arPlaceholder.style.display = "none";
 
-          areaError.style.display = "none";
+          areaError.classList.remove("show");
 
           closeAreaPanel();
-          showStep3();
+          showSurvey();
         });
 
         arOptionsList.appendChild(li);
@@ -1079,6 +1625,7 @@
       }
 
       arPanel.classList.add("open");
+      arDisplayButton.classList.add("active");
       arSearchInput.value = "";
       renderAreaOptions(stationName, "");
       arSearchInput.focus();
@@ -1086,6 +1633,7 @@
 
     function closeAreaPanel() {
       arPanel.classList.remove("open");
+      arDisplayButton.classList.remove("active");
     }
 
     arDisplayButton.addEventListener("click", () => {
@@ -1113,13 +1661,49 @@
       renderAreaOptions(stationName, this.value);
     });
 
+    // Track survey progress
+    function updateSurveyProgress() {
+      const personalFields = ["respondentName", "ageGroup", "mobileNumber", "occupation"];
+      const socialFields = ["familyBehavior", "addiction", "neighbourhood"];
+      const safetyFields = ["streetSafety", "publicTransport", "schoolSafety", "cyberHarassment", 
+                           "stalking", "emergencyNumbers", "nightSafety", "policeResponse", 
+                           "womenPoliceComfort", "shaktiApp"];
+      
+      let personalComplete = personalFields.every(field => {
+        if (field === "respondentName" || field === "mobileNumber") {
+          return $(field).value.trim() !== "";
+        }
+        return getRadioValue(field) !== "" || document.querySelectorAll('input[name="' + field + '"]:checked').length > 0;
+      });
+
+      let socialComplete = socialFields.every(field => {
+        return getRadioValue(field) !== "" || document.querySelectorAll('input[name="' + field + '"]:checked').length > 0;
+      });
+
+      let safetyComplete = safetyFields.every(field => {
+        return getRadioValue(field) !== "";
+      });
+
+      if (personalComplete && socialComplete && safetyComplete) {
+        updateProgress(3);
+      } else if (personalComplete) {
+        updateProgress(2);
+      }
+    }
+
+    // Add listeners to track progress
+    document.querySelectorAll('input[type="radio"], input[type="checkbox"], .text-input').forEach(input => {
+      input.addEventListener("change", updateSurveyProgress);
+      input.addEventListener("input", updateSurveyProgress);
+    });
+
     // Basic validation on submit
     form.addEventListener("submit", function (event) {
       event.preventDefault();
 
-      policeStationError.style.display = "none";
-      areaError.style.display = "none";
-      successMessage.style.display = "none";
+      policeStationError.classList.remove("show");
+      areaError.classList.remove("show");
+      successMessage.classList.remove("show");
 
       const selectedStation = policeStationInput.value;
       const selectedArea = areaInput.value;
@@ -1127,12 +1711,12 @@
       let isValid = true;
 
       if (!selectedStation) {
-        policeStationError.style.display = "block";
+        policeStationError.classList.add("show");
         isValid = false;
       }
 
       if (!selectedArea) {
-        areaError.style.display = "block";
+        areaError.classList.add("show");
         isValid = false;
       }
 
@@ -1140,31 +1724,39 @@
 
       // 1. Respondent Name
       respondentNameError.textContent = "";
+      respondentNameError.classList.remove("show");
       if (!respondentNameInput.value.trim()) {
         respondentNameError.textContent = "Please enter your name.";
+        respondentNameError.classList.add("show");
         isValid = false;
       }
 
       // 2. Age Group
       $("ageGroupError").textContent = "";
+      $("ageGroupError").classList.remove("show");
       if (!getRadioValue("ageGroup")) {
         $("ageGroupError").textContent = "Please select your age group.";
+        $("ageGroupError").classList.add("show");
         isValid = false;
       }
 
       // 3. Mobile Number (exactly 10 digits)
       mobileNumberError.textContent = "";
+      mobileNumberError.classList.remove("show");
       const mobile = mobileNumberInput.value.trim();
       if (!/^\d{10}$/.test(mobile)) {
         mobileNumberError.textContent =
           "Please enter a valid 10 digit mobile number.";
+        mobileNumberError.classList.add("show");
         isValid = false;
       }
 
       // 4. Occupation
       $("occupationError").textContent = "";
+      $("occupationError").classList.remove("show");
       if (!getRadioValue("occupation")) {
         $("occupationError").textContent = "Please select your occupation.";
+        $("occupationError").classList.add("show");
         isValid = false;
       }
 
@@ -1172,28 +1764,34 @@
 
       // 5. Family behavior
       $("familyBehaviorError").textContent = "";
+      $("familyBehaviorError").classList.remove("show");
       if (!getRadioValue("familyBehavior")) {
         $("familyBehaviorError").textContent =
           "Please select family behaviour.";
+        $("familyBehaviorError").classList.add("show");
         isValid = false;
       }
 
       // 6. Addiction in family (at least one checkbox)
       $("addictionError").textContent = "";
+      $("addictionError").classList.remove("show");
       const addictionChecked = document.querySelectorAll(
         'input[name="addiction"]:checked'
       );
       if (addictionChecked.length === 0) {
         $("addictionError").textContent =
           "Please select at least one option (including 'No' if none).";
+        $("addictionError").classList.add("show");
         isValid = false;
       }
 
       // 7. Neighbourhood behaviour
       $("neighbourhoodError").textContent = "";
+      $("neighbourhoodError").classList.remove("show");
       if (!getRadioValue("neighbourhood")) {
         $("neighbourhoodError").textContent =
           "Please select neighbourhood behaviour.";
+        $("neighbourhoodError").classList.add("show");
         isValid = false;
       }
 
@@ -1201,81 +1799,101 @@
 
       // 8. Safety of street/locality
       $("streetSafetyError").textContent = "";
+      $("streetSafetyError").classList.remove("show");
       if (!getRadioValue("streetSafety")) {
         $("streetSafetyError").textContent =
           "Please choose how safe your street/locality is.";
+        $("streetSafetyError").classList.add("show");
         isValid = false;
       }
 
       // 9. Public transportation problems
       $("publicTransportError").textContent = "";
+      $("publicTransportError").classList.remove("show");
       if (!getRadioValue("publicTransport")) {
         $("publicTransportError").textContent =
           "Please answer about public transportation problems.";
+        $("publicTransportError").classList.add("show");
         isValid = false;
       }
 
       // 10. School/college surroundings safety
       $("schoolSafetyError").textContent = "";
+      $("schoolSafetyError").classList.remove("show");
       if (!getRadioValue("schoolSafety")) {
         $("schoolSafetyError").textContent =
           "Please select school/college surroundings safety.";
+        $("schoolSafetyError").classList.add("show");
         isValid = false;
       }
 
       // 11. Cyber harassment
       $("cyberHarassmentError").textContent = "";
+      $("cyberHarassmentError").classList.remove("show");
       if (!getRadioValue("cyberHarassment")) {
         $("cyberHarassmentError").textContent =
           "Please answer about cyber harassment/blackmail.";
+        $("cyberHarassmentError").classList.add("show");
         isValid = false;
       }
 
       // 12. Forced love proposals / stalking
       $("stalkingError").textContent = "";
+      $("stalkingError").classList.remove("show");
       if (!getRadioValue("stalking")) {
         $("stalkingError").textContent =
           "Please answer about forced love proposals/stalking.";
+        $("stalkingError").classList.add("show");
         isValid = false;
       }
 
       // 13. Emergency police numbers visibility
       $("emergencyNumbersError").textContent = "";
+      $("emergencyNumbersError").classList.remove("show");
       if (!getRadioValue("emergencyNumbers")) {
         $("emergencyNumbersError").textContent =
           "Please answer about emergency police numbers visibility.";
+        $("emergencyNumbersError").classList.add("show");
         isValid = false;
       }
 
       // 14. Safety during night time
       $("nightSafetyError").textContent = "";
+      $("nightSafetyError").classList.remove("show");
       if (!getRadioValue("nightSafety")) {
         $("nightSafetyError").textContent =
           "Please select how safe you feel at night.";
+        $("nightSafetyError").classList.add("show");
         isValid = false;
       }
 
       // 15. Police responsiveness
       $("policeResponseError").textContent = "";
+      $("policeResponseError").classList.remove("show");
       if (!getRadioValue("policeResponse")) {
         $("policeResponseError").textContent =
           "Please select police responsiveness.";
+        $("policeResponseError").classList.add("show");
         isValid = false;
       }
 
       // 16. Comfort with women police officers
       $("womenPoliceComfortError").textContent = "";
+      $("womenPoliceComfortError").classList.remove("show");
       if (!getRadioValue("womenPoliceComfort")) {
         $("womenPoliceComfortError").textContent =
           "Please answer about comfort with women police officers.";
+        $("womenPoliceComfortError").classList.add("show");
         isValid = false;
       }
 
       // 17. Shakti App registration
       $("shaktiAppError").textContent = "";
+      $("shaktiAppError").classList.remove("show");
       if (!getRadioValue("shaktiApp")) {
         $("shaktiAppError").textContent =
           "Please answer whether you registered in Shakti App.";
+        $("shaktiAppError").classList.add("show");
         isValid = false;
       }
 
@@ -1289,7 +1907,7 @@
         " | Area: " +
         selectedArea +
         ". Your responses have been recorded.";
-      successMessage.style.display = "block";
+      successMessage.classList.add("show");
 
       // Optionally, you could clear the form here if desired.
       // form.reset();
