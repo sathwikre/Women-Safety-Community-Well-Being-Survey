@@ -50,6 +50,18 @@
       margin-bottom: 14px;
     }
 
+    .field-label-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .field-hint {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
     label {
       display: block;
       font-size: 13px;
@@ -58,6 +70,7 @@
       margin-bottom: 6px;
     }
 
+    /* Native select (used for Area) */
     select {
       width: 100%;
       padding: 8px 10px;
@@ -80,6 +93,124 @@
       background-color: #f3f4f6;
       color: #9ca3af;
       cursor: not-allowed;
+    }
+
+    /* Custom searchable dropdown for Police Station */
+    .custom-select {
+      position: relative;
+      margin-top: 4px;
+    }
+
+    .select-display {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      background-color: #ffffff;
+      font-size: 14px;
+      color: #111827;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease,
+        background-color 0.15s ease;
+    }
+
+    .select-display:hover {
+      border-color: #9ca3af;
+    }
+
+    .select-display:focus-visible {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+
+    .select-placeholder {
+      color: #9ca3af;
+      flex: 1;
+    }
+
+    .select-value {
+      flex: 1;
+      margin-right: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .select-arrow {
+      margin-left: 8px;
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .select-panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin-top: 4px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 14px 45px rgba(15, 23, 42, 0.18);
+      padding: 8px;
+      z-index: 20;
+      display: none;
+    }
+
+    .select-panel.open {
+      display: block;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 6px 9px;
+      font-size: 12px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background-color: #f9fafb;
+      color: #111827;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease,
+        background-color 0.15s ease;
+    }
+
+    .search-input::placeholder {
+      color: #9ca3af;
+    }
+
+    .search-input:focus {
+      border-color: #2563eb;
+      background-color: #ffffff;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.12);
+    }
+
+    .select-options {
+      list-style: none;
+      margin: 6px 0 0;
+      padding: 0;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .select-option {
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .select-option:hover {
+      background-color: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .no-results {
+      font-size: 12px;
+      color: #6b7280;
+      padding: 4px 2px;
     }
 
     .error-message {
@@ -135,19 +266,64 @@
     </div>
 
     <form id="surveyForm" novalidate>
+      <!-- Custom searchable Police Station dropdown -->
       <div class="form-group">
-        <label for="policeStation">Police Station</label>
-        <select id="policeStation" name="policeStation">
-          <option value="">-- Select Police Station --</option>
-          <!-- Options will be added dynamically from the mapping -->
-        </select>
+        <div class="field-label-row">
+          <label for="policeStationDisplay">Police Station</label>
+          <span class="field-hint">Click to search & select</span>
+        </div>
+
+        <div class="custom-select" id="policeStationDropdown">
+          <button
+            type="button"
+            id="policeStationDisplay"
+            class="select-display"
+          >
+            <span id="policeStationPlaceholder" class="select-placeholder">
+              Select Police Station
+            </span>
+            <span
+              id="policeStationValue"
+              class="select-value"
+              style="display: none"
+            ></span>
+            <span class="select-arrow">▾</span>
+          </button>
+
+          <div class="select-panel" id="policeStationPanel">
+            <input
+              type="text"
+              id="policeStationSearch"
+              class="search-input select-search"
+              placeholder="Search police station..."
+              autocomplete="off"
+            />
+            <ul id="policeStationOptions" class="select-options">
+              <!-- Stations will be rendered here -->
+            </ul>
+            <div
+              id="policeStationNoResults"
+              class="no-results"
+              style="display: none"
+            >
+              No stations found.
+            </div>
+          </div>
+        </div>
+
+        <!-- Hidden field that actually stores the value for the form -->
+        <input type="hidden" id="policeStation" name="policeStation" />
+
         <div id="policeStationError" class="error-message">
           Please select a Police Station.
         </div>
       </div>
 
       <div class="form-group">
-        <label for="area">Area / Village</label>
+        <div class="field-label-row">
+          <label for="area">Area / Village</label>
+          <span class="field-hint">Updates from Police Station</span>
+        </div>
         <select id="area" name="area" disabled>
           <option value="">-- Select Area --</option>
           <!-- Area options will be added dynamically -->
@@ -169,38 +345,92 @@
   <script src="mapping.js"></script>
 
   <script>
-    // `policeStationAreas` is defined globally in `mapping.js`
-    // The code below wires it to the dropdowns in this page.
+    // `policeStationAreas` is defined globally in `mapping.js`.
+    // This script wires it to a custom searchable dropdown for
+    // Police Station and a normal dropdown for Area.
 
-    const policeStationSelect = document.getElementById("policeStation");
-    const areaSelect = document.getElementById("area");
+    // Form + error elements
     const form = document.getElementById("surveyForm");
-
     const policeStationError = document.getElementById("policeStationError");
     const areaError = document.getElementById("areaError");
     const successMessage = document.getElementById("successMessage");
 
-    // Helper: normalize a name for deduplication (trim + lowercase)
+    // Hidden field that stores the selected Police Station
+    const policeStationInput = document.getElementById("policeStation");
+
+    // Custom dropdown elements
+    const psDropdown = document.getElementById("policeStationDropdown");
+    const psDisplayButton = document.getElementById("policeStationDisplay");
+    const psPlaceholder = document.getElementById("policeStationPlaceholder");
+    const psValueSpan = document.getElementById("policeStationValue");
+    const psPanel = document.getElementById("policeStationPanel");
+    const psSearchInput = document.getElementById("policeStationSearch");
+    const psOptionsList = document.getElementById("policeStationOptions");
+    const psNoResults = document.getElementById("policeStationNoResults");
+
+    // Area select
+    const areaSelect = document.getElementById("area");
+
+    // Helper: trim + lowercase, useful for deduplication
     function normalizeName(name) {
       return name.trim().toLowerCase();
     }
 
-    // Populate Police Station dropdown from the mapping
-    function populatePoliceStations() {
-      // Clear existing (keep the placeholder)
-      policeStationSelect.innerHTML =
-        '<option value="">-- Select Police Station --</option>';
+    // Render Police Station options into the custom dropdown list
+    function renderPoliceStationOptions(filterText = "") {
+      psOptionsList.innerHTML = "";
+      psNoResults.style.display = "none";
 
-      const stationNames = Object.keys(policeStationAreas).sort((a, b) =>
-        a.localeCompare(b)
-      );
+      const term = filterText.trim().toLowerCase();
+
+      const stationNames = Object.keys(policeStationAreas)
+        .filter((name) =>
+          term ? name.toLowerCase().includes(term) : true
+        )
+        .sort((a, b) => a.localeCompare(b));
+
+      if (stationNames.length === 0) {
+        psNoResults.style.display = "block";
+        return;
+      }
 
       stationNames.forEach((stationName) => {
-        const option = document.createElement("option");
-        option.value = stationName; // keep exact name as value
-        option.textContent = stationName; // show exactly as given
-        policeStationSelect.appendChild(option);
+        const li = document.createElement("li");
+        li.textContent = stationName;
+        li.className = "select-option";
+
+        li.addEventListener("click", () => {
+          // Store the value
+          policeStationInput.value = stationName;
+
+          // Update display text
+          psValueSpan.textContent = stationName;
+          psValueSpan.style.display = "inline";
+          psPlaceholder.style.display = "none";
+
+          // Clear any previous error message
+          policeStationError.style.display = "none";
+
+          // When station changes, refresh areas
+          populateAreasForStation(stationName);
+          areaError.style.display = "none";
+
+          closePoliceStationPanel();
+        });
+
+        psOptionsList.appendChild(li);
       });
+    }
+
+    function openPoliceStationPanel() {
+      psPanel.classList.add("open");
+      psSearchInput.value = "";
+      renderPoliceStationOptions("");
+      psSearchInput.focus();
+    }
+
+    function closePoliceStationPanel() {
+      psPanel.classList.remove("open");
     }
 
     // Populate Areas dropdown for a selected Police Station
@@ -214,7 +444,6 @@
       }
 
       const rawAreas = policeStationAreas[stationName] || [];
-
       const seen = new Set(); // for duplicate removal
 
       rawAreas.forEach((raw) => {
@@ -229,7 +458,7 @@
         seen.add(key);
 
         const option = document.createElement("option");
-        option.value = trimmed;    // keep exact name (trimmed)
+        option.value = trimmed; // keep exact name (trimmed)
         option.textContent = trimmed;
         areaSelect.appendChild(option);
       });
@@ -238,16 +467,29 @@
       areaSelect.disabled = areaSelect.options.length <= 1;
     }
 
-    // Handle Police Station change
-    policeStationSelect.addEventListener("change", function () {
-      const stationName = this.value;
-      policeStationError.style.display = "none"; // clear error on change
-      areaError.style.display = "none";
-
-      populateAreasForStation(stationName);
+    // Toggle open/close when the main display is clicked
+    psDisplayButton.addEventListener("click", () => {
+      const isOpen = psPanel.classList.contains("open");
+      if (isOpen) {
+        closePoliceStationPanel();
+      } else {
+        openPoliceStationPanel();
+      }
     });
 
-    // Handle Area change (clear error)
+    // Close when clicking outside the dropdown
+    document.addEventListener("click", (event) => {
+      if (!psDropdown.contains(event.target)) {
+        closePoliceStationPanel();
+      }
+    });
+
+    // Filter police stations as the user types
+    psSearchInput.addEventListener("input", function () {
+      renderPoliceStationOptions(this.value);
+    });
+
+    // Clear Area error when user chooses an Area
     areaSelect.addEventListener("change", function () {
       if (this.value) {
         areaError.style.display = "none";
@@ -262,7 +504,7 @@
       areaError.style.display = "none";
       successMessage.style.display = "none";
 
-      const selectedStation = policeStationSelect.value;
+      const selectedStation = policeStationInput.value;
       const selectedArea = areaSelect.value;
 
       let isValid = true;
@@ -289,9 +531,9 @@
       successMessage.style.display = "block";
     });
 
-    // Initialize on load
-    populatePoliceStations();
-    populateAreasForStation(""); // keep Area disabled initially
+    // ---- Initial setup ----
+    renderPoliceStationOptions("");
+    areaSelect.disabled = true;
   </script>
 </body>
 </html>
