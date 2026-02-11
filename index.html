@@ -50,6 +50,28 @@
       margin-bottom: 14px;
     }
 
+    .text-input {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      background-color: #ffffff;
+      color: #111827;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .text-input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+    }
+
+    textarea.text-input {
+      min-height: 80px;
+      resize: vertical;
+    }
+
     .field-label-row {
       display: flex;
       align-items: baseline;
@@ -60,6 +82,43 @@
     .field-hint {
       font-size: 11px;
       color: #9ca3af;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 16px 0 8px;
+    }
+
+    .step-tag {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #2563eb;
+      background: #eff6ff;
+      border-radius: 999px;
+      padding: 2px 8px;
+    }
+
+    .step-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .section-heading {
+      margin: 18px 0 6px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .section-subtitle {
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: #6b7280;
     }
 
     label {
@@ -213,6 +272,29 @@
       padding: 4px 2px;
     }
 
+    .radio-group,
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      margin-top: 4px;
+    }
+
+    .radio-option,
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #111827;
+    }
+
+    .radio-option input,
+    .checkbox-option input {
+      width: 14px;
+      height: 14px;
+    }
+
     .error-message {
       display: none;
       margin-top: 4px;
@@ -266,6 +348,11 @@
     </div>
 
     <form id="surveyForm" novalidate>
+      <!-- STEP 1: Police Station -->
+      <div class="step-header">
+        <span class="step-tag">Step 1</span>
+        <span class="step-text">Select Police Station</span>
+      </div>
       <!-- Custom searchable Police Station dropdown -->
       <div class="form-group">
         <div class="field-label-row">
@@ -319,25 +406,438 @@
         </div>
       </div>
 
+      <!-- STEP 2: Area / Village -->
+      <div class="step-header">
+        <span class="step-tag">Step 2</span>
+        <span class="step-text">Select Area / Village</span>
+      </div>
       <div class="form-group">
         <div class="field-label-row">
           <label for="area">Area / Village</label>
-          <span class="field-hint">Updates from Police Station</span>
+          <span class="field-hint">Click to search & select</span>
         </div>
-        <select id="area" name="area" disabled>
-          <option value="">-- Select Area --</option>
-          <!-- Area options will be added dynamically -->
-        </select>
+
+        <div class="custom-select" id="areaDropdown">
+          <button
+            type="button"
+            id="areaDisplay"
+            class="select-display"
+          >
+            <span id="areaPlaceholder" class="select-placeholder">
+              Select Area / Village
+            </span>
+            <span
+              id="areaValue"
+              class="select-value"
+              style="display: none"
+            ></span>
+            <span class="select-arrow">▾</span>
+          </button>
+
+          <div class="select-panel" id="areaPanel">
+            <input
+              type="text"
+              id="areaSearch"
+              class="search-input select-search"
+              placeholder="Search area..."
+              autocomplete="off"
+            />
+            <ul id="areaOptions" class="select-options">
+              <!-- Areas will be rendered here -->
+            </ul>
+            <div
+              id="areaNoResults"
+              class="no-results"
+              style="display: none"
+            >
+              No areas found.
+            </div>
+          </div>
+        </div>
+
+        <!-- Hidden field that actually stores the Area value for the form -->
+        <input type="hidden" id="area" name="area" />
+
         <div id="areaError" class="error-message">
           Please select an Area.
         </div>
       </div>
 
-      <div class="btn-row">
-        <button type="submit">Submit</button>
-      </div>
+      <!-- STEP 3: Full survey, shown only after Area is selected -->
+      <div id="step3Container" style="display: none">
+        <div class="step-header">
+          <span class="step-tag">Step 3</span>
+          <span class="step-text">Answer the survey questions</span>
+        </div>
 
-      <div id="successMessage" class="success-message"></div>
+        <!-- Personal Details -->
+        <h3 class="section-heading">Personal Details</h3>
+        <p class="section-subtitle">
+          Tell us a bit about yourself. All questions in this section are required.
+        </p>
+
+        <!-- 1. Respondent Name -->
+        <div class="form-group">
+          <label for="respondentName">1. Respondent Name</label>
+          <input
+            type="text"
+            id="respondentName"
+            name="respondentName"
+            class="text-input"
+          />
+          <div id="respondentNameError" class="error-message"></div>
+        </div>
+
+        <!-- 2. Age Group -->
+        <div class="form-group">
+          <label>2. Age Group</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="ageGroup" value="Below 25" />
+              <span>Below 25</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="ageGroup" value="25–45" />
+              <span>25–45</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="ageGroup" value="Above 45" />
+              <span>Above 45</span>
+            </label>
+          </div>
+          <div id="ageGroupError" class="error-message"></div>
+        </div>
+
+        <!-- 3. Mobile Number -->
+        <div class="form-group">
+          <label for="mobileNumber">3. Mobile Number</label>
+          <input
+            type="tel"
+            id="mobileNumber"
+            name="mobileNumber"
+            class="text-input"
+            inputmode="numeric"
+            maxlength="10"
+            placeholder="10 digit mobile number"
+          />
+          <div id="mobileNumberError" class="error-message"></div>
+        </div>
+
+        <!-- 4. Occupation -->
+        <div class="form-group">
+          <label>4. Occupation</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="occupation" value="Student" />
+              <span>Student</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="occupation" value="Homemaker" />
+              <span>Homemaker</span>
+            </label>
+            <label class="radio-option">
+              <input
+                type="radio"
+                name="occupation"
+                value="Employed (Govt / Private / Self)"
+              />
+              <span>Employed (Govt / Private / Self)</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="occupation" value="Unemployed" />
+              <span>Unemployed</span>
+            </label>
+          </div>
+          <div id="occupationError" class="error-message"></div>
+        </div>
+
+        <!-- Social Environment -->
+        <h3 class="section-heading">Social Environment</h3>
+
+        <!-- 5. Family behavior -->
+        <div class="form-group">
+          <label>5. Family behavior towards you/your children</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="familyBehavior" value="Good" />
+              <span>Good</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="familyBehavior" value="Average" />
+              <span>Average</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="familyBehavior" value="Poor" />
+              <span>Poor</span>
+            </label>
+          </div>
+          <div id="familyBehaviorError" class="error-message"></div>
+        </div>
+
+        <!-- 6. Addiction in family -->
+        <div class="form-group">
+          <label>6. Any addiction in family members?</label>
+          <div class="checkbox-group">
+            <label class="checkbox-option">
+              <input type="checkbox" name="addiction" value="Alcohol" />
+              <span>Alcohol</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="addiction" value="Drugs" />
+              <span>Drugs</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="addiction" value="Tobacco" />
+              <span>Tobacco</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="addiction" value="No" />
+              <span>No</span>
+            </label>
+          </div>
+          <div id="addictionError" class="error-message"></div>
+        </div>
+
+        <!-- 7. Neighbourhood behaviour -->
+        <div class="form-group">
+          <label>7. Neighbourhood behaviour towards you</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="neighbourhood" value="Good" />
+              <span>Good</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="neighbourhood" value="Average" />
+              <span>Average</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="neighbourhood" value="Poor" />
+              <span>Poor</span>
+            </label>
+          </div>
+          <div id="neighbourhoodError" class="error-message"></div>
+        </div>
+
+        <!-- Safety & Public Experience -->
+        <h3 class="section-heading">Safety & Public Experience</h3>
+
+        <!-- 8. Safety of street/locality -->
+        <div class="form-group">
+          <label>8. Safety of your street/locality</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="streetSafety" value="Safe" />
+              <span>Safe</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="streetSafety" value="Neutral" />
+              <span>Neutral</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="streetSafety" value="Unsafe" />
+              <span>Unsafe</span>
+            </label>
+          </div>
+          <div id="streetSafetyError" class="error-message"></div>
+        </div>
+
+        <!-- 9. Problems in public transportation -->
+        <div class="form-group">
+          <label>9. Problems faced during public transportation</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="publicTransport" value="Yes" />
+              <span>Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="publicTransport" value="Sometimes" />
+              <span>Sometimes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="publicTransport" value="No" />
+              <span>No</span>
+            </label>
+          </div>
+          <div id="publicTransportError" class="error-message"></div>
+        </div>
+
+        <!-- 10. Safety of school/college surroundings -->
+        <div class="form-group">
+          <label>10. If student: Safety of school/college surroundings</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="schoolSafety" value="Safe" />
+              <span>Safe</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="schoolSafety" value="Neutral" />
+              <span>Neutral</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="schoolSafety" value="Unsafe" />
+              <span>Unsafe</span>
+            </label>
+          </div>
+          <div id="schoolSafetyError" class="error-message"></div>
+        </div>
+
+        <!-- 11. Cyber harassment -->
+        <div class="form-group">
+          <label>11. Faced cyber harassment/blackmail</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="cyberHarassment" value="Yes" />
+              <span>Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="cyberHarassment" value="No" />
+              <span>No</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="cyberHarassment" value="Not Sure" />
+              <span>Not Sure</span>
+            </label>
+          </div>
+          <div id="cyberHarassmentError" class="error-message"></div>
+        </div>
+
+        <!-- 12. Forced love proposals/stalking -->
+        <div class="form-group">
+          <label>12. Faced forced love proposals/stalking</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="stalking" value="Yes" />
+              <span>Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="stalking" value="No" />
+              <span>No</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="stalking" value="Not Sure" />
+              <span>Not Sure</span>
+            </label>
+          </div>
+          <div id="stalkingError" class="error-message"></div>
+        </div>
+
+        <!-- 13. Emergency police numbers visibility -->
+        <div class="form-group">
+          <label>13. Emergency police numbers visible in public places</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="emergencyNumbers" value="Yes" />
+              <span>Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="emergencyNumbers" value="No" />
+              <span>No</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="emergencyNumbers" value="Not Sure" />
+              <span>Not Sure</span>
+            </label>
+          </div>
+          <div id="emergencyNumbersError" class="error-message"></div>
+        </div>
+
+        <!-- 14. Safety feeling during night time -->
+        <div class="form-group">
+          <label>14. Safety feeling during night time</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="nightSafety" value="Safe" />
+              <span>Safe</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="nightSafety" value="Neutral" />
+              <span>Neutral</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="nightSafety" value="Unsafe" />
+              <span>Unsafe</span>
+            </label>
+          </div>
+          <div id="nightSafetyError" class="error-message"></div>
+        </div>
+
+        <!-- 15. Police responsiveness -->
+        <div class="form-group">
+          <label>15. Police responsiveness in your area</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="policeResponse" value="Immediate" />
+              <span>Immediate</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="policeResponse" value="Average" />
+              <span>Average</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="policeResponse" value="No Response" />
+              <span>No Response</span>
+            </label>
+          </div>
+          <div id="policeResponseError" class="error-message"></div>
+        </div>
+
+        <!-- 16. Comfort with women police officers -->
+        <div class="form-group">
+          <label>16. Comfort in approaching women police officers</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="womenPoliceComfort" value="Yes" />
+              <span>Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="womenPoliceComfort" value="No" />
+              <span>No</span>
+            </label>
+            <label class="radio-option">
+              <input
+                type="radio"
+                name="womenPoliceComfort"
+                value="Not Sure"
+              />
+              <span>Not Sure</span>
+            </label>
+          </div>
+          <div id="womenPoliceComfortError" class="error-message"></div>
+        </div>
+
+        <!-- 17. Shakti App registration -->
+        <div class="form-group">
+          <label>17. Did you register in Shakti App</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="shaktiApp" value="Yes" />
+              <span>Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="shaktiApp" value="No" />
+              <span>No</span>
+            </label>
+          </div>
+          <div id="shaktiAppError" class="error-message"></div>
+        </div>
+
+        <!-- 18. Remarks (optional) -->
+        <div class="form-group">
+          <label for="remarks">18. Remarks (Optional)</label>
+          <textarea
+            id="remarks"
+            name="remarks"
+            class="text-input"
+            placeholder="Share any additional feedback or suggestions..."
+          ></textarea>
+        </div>
+
+        <div class="btn-row">
+          <button type="submit">Submit Survey</button>
+        </div>
+
+        <div id="successMessage" class="success-message"></div>
+      </div>
     </form>
   </div>
 
@@ -346,8 +846,8 @@
 
   <script>
     // `policeStationAreas` is defined globally in `mapping.js`.
-    // This script wires it to a custom searchable dropdown for
-    // Police Station and a normal dropdown for Area.
+    // This script wires it to custom searchable dropdowns for
+    // Police Station and Area / Village.
 
     // Form + error elements
     const form = document.getElementById("surveyForm");
@@ -368,12 +868,49 @@
     const psOptionsList = document.getElementById("policeStationOptions");
     const psNoResults = document.getElementById("policeStationNoResults");
 
-    // Area select
-    const areaSelect = document.getElementById("area");
+    // Area custom dropdown + hidden input
+    const areaInput = document.getElementById("area");
+    const arDropdown = document.getElementById("areaDropdown");
+    const arDisplayButton = document.getElementById("areaDisplay");
+    const arPlaceholder = document.getElementById("areaPlaceholder");
+    const arValueSpan = document.getElementById("areaValue");
+    const arPanel = document.getElementById("areaPanel");
+    const arSearchInput = document.getElementById("areaSearch");
+    const arOptionsList = document.getElementById("areaOptions");
+    const arNoResults = document.getElementById("areaNoResults");
+    const step3Container = document.getElementById("step3Container");
+
+    // Personal Details inputs
+    const respondentNameInput = document.getElementById("respondentName");
+    const respondentNameError = document.getElementById("respondentNameError");
+    const mobileNumberInput = document.getElementById("mobileNumber");
+    const mobileNumberError = document.getElementById("mobileNumberError");
+
+    // Helper to get error element by id
+    function $(id) {
+      return document.getElementById(id);
+    }
 
     // Helper: trim + lowercase, useful for deduplication
     function normalizeName(name) {
       return name.trim().toLowerCase();
+    }
+
+    // Helper: get selected radio value for a group
+    function getRadioValue(groupName) {
+      const checked = document.querySelector(
+        'input[name="' + groupName + '"]:checked'
+      );
+      return checked ? checked.value : "";
+    }
+
+    // Show/hide step 3 based on Area selection
+    function showStep3() {
+      step3Container.style.display = "block";
+    }
+
+    function hideStep3() {
+      step3Container.style.display = "none";
     }
 
     // Render Police Station options into the custom dropdown list
@@ -435,16 +972,36 @@
 
     // Populate Areas dropdown for a selected Police Station
     function populateAreasForStation(stationName) {
-      areaSelect.innerHTML =
-        '<option value="">-- Select Area --</option>';
+      // Reset stored value and display each time station changes
+      areaInput.value = "";
+      arValueSpan.textContent = "";
+      arValueSpan.style.display = "none";
+      arPlaceholder.textContent = stationName
+        ? "Select Area / Village"
+        : "Select Area (choose station first)";
+
+      // Hide the full survey until a new Area is chosen
+      hideStep3();
+
+      // Re-render list for the new station with no search filter
+      renderAreaOptions(stationName, "");
+      closeAreaPanel();
+    }
+
+    // Render Areas for the given station into the Area dropdown
+    function renderAreaOptions(stationName, filterText = "") {
+      arOptionsList.innerHTML = "";
+      arNoResults.style.display = "none";
 
       if (!stationName) {
-        areaSelect.disabled = true;
         return;
       }
 
       const rawAreas = policeStationAreas[stationName] || [];
       const seen = new Set(); // for duplicate removal
+      const term = filterText.trim().toLowerCase();
+
+      const areasToShow = [];
 
       rawAreas.forEach((raw) => {
         if (typeof raw !== "string") return;
@@ -454,17 +1011,40 @@
 
         const key = normalizeName(trimmed);
         if (seen.has(key)) return; // skip duplicates
-
         seen.add(key);
 
-        const option = document.createElement("option");
-        option.value = trimmed; // keep exact name (trimmed)
-        option.textContent = trimmed;
-        areaSelect.appendChild(option);
+        if (term && !trimmed.toLowerCase().includes(term)) {
+          return; // filter by search term
+        }
+
+        areasToShow.push(trimmed);
       });
 
-      // Enable only if we actually have areas beyond the placeholder
-      areaSelect.disabled = areaSelect.options.length <= 1;
+      if (areasToShow.length === 0) {
+        arNoResults.style.display = "block";
+        return;
+      }
+
+      areasToShow.forEach((areaName) => {
+        const li = document.createElement("li");
+        li.textContent = areaName;
+        li.className = "select-option";
+
+        li.addEventListener("click", () => {
+          areaInput.value = areaName;
+
+          arValueSpan.textContent = areaName;
+          arValueSpan.style.display = "inline";
+          arPlaceholder.style.display = "none";
+
+          areaError.style.display = "none";
+
+          closeAreaPanel();
+          showStep3();
+        });
+
+        arOptionsList.appendChild(li);
+      });
     }
 
     // Toggle open/close when the main display is clicked
@@ -489,11 +1069,48 @@
       renderPoliceStationOptions(this.value);
     });
 
-    // Clear Area error when user chooses an Area
-    areaSelect.addEventListener("change", function () {
-      if (this.value) {
-        areaError.style.display = "none";
+    // --- Area dropdown behaviour ---
+
+    function openAreaPanel() {
+      const stationName = policeStationInput.value;
+      if (!stationName) {
+        // If no station, do nothing. User must pick station first.
+        return;
       }
+
+      arPanel.classList.add("open");
+      arSearchInput.value = "";
+      renderAreaOptions(stationName, "");
+      arSearchInput.focus();
+    }
+
+    function closeAreaPanel() {
+      arPanel.classList.remove("open");
+    }
+
+    arDisplayButton.addEventListener("click", () => {
+      const isOpen = arPanel.classList.contains("open");
+      if (isOpen) {
+        closeAreaPanel();
+      } else {
+        openAreaPanel();
+      }
+    });
+
+    // Close Area panel when clicking outside of it
+    document.addEventListener("click", (event) => {
+      if (!arDropdown.contains(event.target)) {
+        closeAreaPanel();
+      }
+    });
+
+    // Live filter for areas
+    arSearchInput.addEventListener("input", function () {
+      const stationName = policeStationInput.value;
+      if (!stationName) {
+        return;
+      }
+      renderAreaOptions(stationName, this.value);
     });
 
     // Basic validation on submit
@@ -505,7 +1122,7 @@
       successMessage.style.display = "none";
 
       const selectedStation = policeStationInput.value;
-      const selectedArea = areaSelect.value;
+      const selectedArea = areaInput.value;
 
       let isValid = true;
 
@@ -519,6 +1136,149 @@
         isValid = false;
       }
 
+      // ---- Validate Personal Details ----
+
+      // 1. Respondent Name
+      respondentNameError.textContent = "";
+      if (!respondentNameInput.value.trim()) {
+        respondentNameError.textContent = "Please enter your name.";
+        isValid = false;
+      }
+
+      // 2. Age Group
+      $("ageGroupError").textContent = "";
+      if (!getRadioValue("ageGroup")) {
+        $("ageGroupError").textContent = "Please select your age group.";
+        isValid = false;
+      }
+
+      // 3. Mobile Number (exactly 10 digits)
+      mobileNumberError.textContent = "";
+      const mobile = mobileNumberInput.value.trim();
+      if (!/^\d{10}$/.test(mobile)) {
+        mobileNumberError.textContent =
+          "Please enter a valid 10 digit mobile number.";
+        isValid = false;
+      }
+
+      // 4. Occupation
+      $("occupationError").textContent = "";
+      if (!getRadioValue("occupation")) {
+        $("occupationError").textContent = "Please select your occupation.";
+        isValid = false;
+      }
+
+      // ---- Social Environment ----
+
+      // 5. Family behavior
+      $("familyBehaviorError").textContent = "";
+      if (!getRadioValue("familyBehavior")) {
+        $("familyBehaviorError").textContent =
+          "Please select family behaviour.";
+        isValid = false;
+      }
+
+      // 6. Addiction in family (at least one checkbox)
+      $("addictionError").textContent = "";
+      const addictionChecked = document.querySelectorAll(
+        'input[name="addiction"]:checked'
+      );
+      if (addictionChecked.length === 0) {
+        $("addictionError").textContent =
+          "Please select at least one option (including 'No' if none).";
+        isValid = false;
+      }
+
+      // 7. Neighbourhood behaviour
+      $("neighbourhoodError").textContent = "";
+      if (!getRadioValue("neighbourhood")) {
+        $("neighbourhoodError").textContent =
+          "Please select neighbourhood behaviour.";
+        isValid = false;
+      }
+
+      // ---- Safety & Public Experience ----
+
+      // 8. Safety of street/locality
+      $("streetSafetyError").textContent = "";
+      if (!getRadioValue("streetSafety")) {
+        $("streetSafetyError").textContent =
+          "Please choose how safe your street/locality is.";
+        isValid = false;
+      }
+
+      // 9. Public transportation problems
+      $("publicTransportError").textContent = "";
+      if (!getRadioValue("publicTransport")) {
+        $("publicTransportError").textContent =
+          "Please answer about public transportation problems.";
+        isValid = false;
+      }
+
+      // 10. School/college surroundings safety
+      $("schoolSafetyError").textContent = "";
+      if (!getRadioValue("schoolSafety")) {
+        $("schoolSafetyError").textContent =
+          "Please select school/college surroundings safety.";
+        isValid = false;
+      }
+
+      // 11. Cyber harassment
+      $("cyberHarassmentError").textContent = "";
+      if (!getRadioValue("cyberHarassment")) {
+        $("cyberHarassmentError").textContent =
+          "Please answer about cyber harassment/blackmail.";
+        isValid = false;
+      }
+
+      // 12. Forced love proposals / stalking
+      $("stalkingError").textContent = "";
+      if (!getRadioValue("stalking")) {
+        $("stalkingError").textContent =
+          "Please answer about forced love proposals/stalking.";
+        isValid = false;
+      }
+
+      // 13. Emergency police numbers visibility
+      $("emergencyNumbersError").textContent = "";
+      if (!getRadioValue("emergencyNumbers")) {
+        $("emergencyNumbersError").textContent =
+          "Please answer about emergency police numbers visibility.";
+        isValid = false;
+      }
+
+      // 14. Safety during night time
+      $("nightSafetyError").textContent = "";
+      if (!getRadioValue("nightSafety")) {
+        $("nightSafetyError").textContent =
+          "Please select how safe you feel at night.";
+        isValid = false;
+      }
+
+      // 15. Police responsiveness
+      $("policeResponseError").textContent = "";
+      if (!getRadioValue("policeResponse")) {
+        $("policeResponseError").textContent =
+          "Please select police responsiveness.";
+        isValid = false;
+      }
+
+      // 16. Comfort with women police officers
+      $("womenPoliceComfortError").textContent = "";
+      if (!getRadioValue("womenPoliceComfort")) {
+        $("womenPoliceComfortError").textContent =
+          "Please answer about comfort with women police officers.";
+        isValid = false;
+      }
+
+      // 17. Shakti App registration
+      $("shaktiAppError").textContent = "";
+      if (!getRadioValue("shaktiApp")) {
+        $("shaktiAppError").textContent =
+          "Please answer whether you registered in Shakti App.";
+        isValid = false;
+      }
+
       if (!isValid) {
         return;
       }
@@ -527,13 +1287,17 @@
         "Selected Police Station: " +
         selectedStation +
         " | Area: " +
-        selectedArea;
+        selectedArea +
+        ". Your responses have been recorded.";
       successMessage.style.display = "block";
+
+      // Optionally, you could clear the form here if desired.
+      // form.reset();
     });
 
     // ---- Initial setup ----
     renderPoliceStationOptions("");
-    areaSelect.disabled = true;
+    arPlaceholder.textContent = "Select Area (choose station first)";
   </script>
 </body>
 </html>
